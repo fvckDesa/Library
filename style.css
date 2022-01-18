@@ -1,3 +1,11 @@
+:root {
+  --cafe-noir: #593f28;
+  --dark-brown: #593e1c;
+  --camel: #bf9969;
+  --deep-champagne: #f2d194;
+  --blond: #fef6c9;
+}
+
 *,
 *::before,
 *::after {
@@ -7,12 +15,14 @@
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-height: 100vh;
   display: flex;
+  color: var(--blond);
 }
 
 a {
-    width: 100%;
+  width: 100%;
 }
 
 h2 {
@@ -25,6 +35,7 @@ main {
   min-height: 100%;
   padding: 1rem;
   gap: 2rem;
+  background-color: /* var(--camel) */ #d5e2f2;
 }
 
 aside {
@@ -36,10 +47,12 @@ aside {
   width: 30vw;
   height: 100vh;
   padding: 1rem;
+  background-color: var(--dark-brown);
   border-right: solid 2px black;
 }
 
 header {
+  font-size: 1.5rem;
   gap: 1rem;
 }
 
@@ -64,7 +77,7 @@ label {
 }
 
 footer {
-    position: relative;
+  position: relative;
 }
 
 .center {
@@ -73,15 +86,57 @@ footer {
   align-items: center;
 }
 
+.flip-box {
+  background: transparent;
+  /* width: 225px;
+  height: 275px; */
+  width: 250px;
+  height: 325px;
+  perspective: 1000px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-box:hover .card {
+  transform: rotateY(180deg) scale(1.05);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  backface-visibility: hidden;
+}
+
+.card-front {
+  background: var(--cafe-noir);
+}
+
+.card-back {
+  background: var(--deep-champagne);
+  transform: rotateY(180deg);
+}
+
 .add-book,
 svg {
+  fill: var(--blond);
   transition: transform 0.5s ease;
 }
 
 .add-book {
   width: 225px;
   height: 275px;
-  border: solid 2px black;
+  border-radius: 15px;
+  background-color: var(--cafe-noir);
 }
 
 .add-book:hover {
@@ -148,5 +203,5 @@ svg {
 }
 
 .info:hover + .reference {
-    opacity: 1;
+  opacity: 1;
 }
