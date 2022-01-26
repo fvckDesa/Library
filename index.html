@@ -51,19 +51,19 @@
         <h2>INFO</h2>
         <div class="content">
           <h3>Book</h3>
-          <p>0</p>
+          <p id="info-book">0</p>
         </div>
         <div class="content">
           <h3>Books read</h3>
-          <p>0</p>
+          <p id="info-book-read">0</p>
         </div>
         <div class="content">
           <h3>Pages</h3>
-          <p>0</p>
+          <p id="info-pages">0</p>
         </div>
         <div class="content">
           <h3>Pages read</h3>
-          <p>0</p>
+          <p id="info-pages-read">0</p>
         </div>
       </div>
       <footer class="center">
@@ -123,39 +123,39 @@
         <div class="fields">
           <div class="field">
             <label for="">Titol</label>
-            <input type="text" name="titol" id="titol"/>
+            <input type="text" name="titol" id="titol" placeholder="book's title"/>
             <small></small>
           </div>
           <div class="field">
             <label for="">Author</label>
-            <input type="text" id="author"/>
+            <input type="text" id="author" placeholder="book's author"/>
             <small></small>
           </div>
           <div class="field-numbers">
             <div class="field">
               <label for="">Pages read</label>
-              <input type="number" value="0" min="0" id="pages-read"/>
+              <input type="number" value="" min="0" id="pages-read" placeholder="0"/>
               <small></small>
             </div>
             <div class="field">
               <label for="">Pages</label>
-              <input type="number" value="0" min="0" id="pages"/>
+              <input type="number" value="" min="0" id="pages" placeholder="0"/>
               <small></small>
             </div>
           </div>
           <div class="field">
             <label for="">Description</label>
-            <textarea name="" id="description" cols="30" rows="8"></textarea>
+            <textarea name="" id="description" cols="30" rows="8" placeholder="short description"></textarea>
             <small></small>
           </div>
           <div class="field">
             <label for="">Book image</label>
-            <input type="url" id="url-image"/>
+            <input type="url" id="url-image" placeholder="book cover URL"/>
             <small></small>
           </div>
         </div>
         <div class="btns">
-          <button class="delete">DELETE</button>
+          <button class="delete" id="form-delete">DELETE</button>
           <button class="add" id="form-add">ADD</button>
         </div>
       </div>

@@ -17,14 +17,16 @@ function Book (title, author, description, pagesRead, pages, url){
 
         const cardFront = document.createElement('div');
         cardFront.classList.add('card-front');
-        fetch(url)
-            .then(response => response.blob())
-            .then(myBlob => {
-            cardFront.style.background = `url(${URL.createObjectURL(myBlob)}) no-repeat fixed center`;
-        }).catch(err => {
-            cardFront.style.background = 'var(--cafe-noir)';
-            throw new Error(err);
-        });
+        cardFront.style.backgroundColor = 'var(--cafe-noir)';
+        if(url){
+            fetch(url)
+                .then(response => response.blob())
+                .then(myBlob => {
+                    cardFront.style.background = `url(${URL.createObjectURL(myBlob)}) no-repeat center`;
+                }).catch(err => {
+                    throw new Error(err);
+                });
+        }
 
         const title = document.createElement('div');
         title.classList.add('title');
@@ -70,10 +72,9 @@ function Book (title, author, description, pagesRead, pages, url){
         input.setAttribute('min', 0);
         input.setAttribute('max', this.pages);
         input.id = 'number';
-
         input.addEventListener('input', (e) => {
             if(e.target.value > this.pages){
-                e.target.value = this.pages
+                e.target.value = this.pages;
             }
         });
 
@@ -95,13 +96,20 @@ const addBook = document.querySelector('#add-book');
 const addBookBtn = document.querySelector('#add-book-button');
 const addBookCard = document.querySelector('#add-book-card');
 const main = document.querySelector('main');
+//form
 const formAdd = document.querySelector('#form-add');
+const formDelete = document.querySelector('#form-delete');
 const formTitol = document.querySelector('#titol');
 const formAuthor = document.querySelector('#author');
 const formDescription = document.querySelector('#description');
 const formPagesRead = document.querySelector('#pages-read');
 const formPages = document.querySelector('#pages');
 const formUrl = document.querySelector('#url-image');
+//info
+const infoBook = document.querySelector('#info-book');
+const infoBookRead = document.querySelector('#info-book-read');
+const infoPages = document.querySelector('#info-pages');
+const infoPagesRead = document.querySelector('#info-pages-read');
 
 function addBookToLibrary(title, author, description, pagesRead, pages, url) {
     myLibrary.unshift(new Book(title, author, description, pagesRead, pages, url));
@@ -126,10 +134,37 @@ formAdd.addEventListener('click', () => {
     const author = formAuthor.value;
     const description = formDescription.value;
     const image = formUrl.value;
-    const pagesRead = formPagesRead.value;
-    const pages = formPages.value;
-
+    const pagesRead = +formPagesRead.value;
+    const pages = +formPages.value;
     addBookToLibrary(titol, author, description, pagesRead, pages, image);
+    clearForm();
+    info();
+});
+
+formDelete.addEventListener('click', clearForm);
+
+function clearForm() {
+    const form = [formTitol, formAuthor, formDescription, formUrl, formPagesRead, formPages]; 
+    form.forEach(input => input.value = '');
     addBook.classList.add('invisible');
-})
+}
+
+function info() {
+    let numBook = myLibrary.length;
+    let numBookRead = 0;
+    let pages = 0;
+    let pagesRead = 0;
+    myLibrary.forEach(book => {
+        if(book.pages === book.pagesRead){
+            numBookRead++;
+        }
+        pages += book.pages;
+        pagesRead += book.pagesRead;
+    });
+    infoBook.innerText = numBook;
+    infoBookRead.innerText = numBookRead;
+    infoPages.innerText = pages;
+    infoPagesRead.innerText = pagesRead;
+}
+
 
