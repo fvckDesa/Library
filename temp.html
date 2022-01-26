@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="temp.js" defer></script>
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        height: 100vh;
+        margin: 0;
+      }
+
+      input {
+        width: 100%;
+      }
+
+      textarea {
+        all: unset;
+        border: solid 1px black;
+      }
+
+      button {
+        width: 49%;
+      }
+
+      .background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 30%;
+        height: 90%;
+        padding: 1rem;
+        border: solid 2px black;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.5rem;
+      }
+
+      .field-numbers {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .field-numbers .field {
+        width: 49%;
+      }
+
+      .btns {
+        width: 100%;
+      }
+
+      .add,
+      .delete {
+        border-radius: 15px;
+      }
+
+      .add:hover,
+      .delete:hover {
+        opacity: 0.8;
+      }
+
+      .add:active,
+      .delete:active {
+        opacity: 1;
+      }
+
+      .add {
+        background-color: lime;
+      }
+
+      .delete {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="form">
+        <h1>Add book</h1>
+        <div class="fields">
+          <div class="field">
+            <label for="">Titol</label>
+            <input type="text" />
+            <small></small>
+          </div>
+          <div class="field">
+            <label for="">Author</label>
+            <input type="text" />
+            <small></small>
+          </div>
+          <div class="field-numbers">
+            <div class="field">
+              <label for="">Pages read</label>
+              <input type="number" value="0" min="0" />
+              <small></small>
+            </div>
+            <div class="field">
+              <label for="">Pages</label>
+              <input type="number" value="0" min="0" />
+              <small></small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="">Description</label>
+            <textarea name="" id="" cols="30" rows="8"></textarea>
+            <small></small>
+          </div>
+          <div class="field">
+            <label for="">Book image</label>
+            <input type="url" />
+            <small></small>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="delete">DELETE</button>
+          <button class="add">ADD</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

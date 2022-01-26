@@ -45,7 +45,7 @@
           <label for="not-read">NOT READ</label>
         </div>
         <button class="delete">DELETE</button>
-        <button class="add">ADD</button>
+        <button class="add" id="add-book-button">ADD</button>
       </nav>
       <div class="info-box">
         <h2>INFO</h2>
@@ -90,21 +90,76 @@
         />
         <div class="reference center">
           <div>
-            <a href="https://www.flaticon.com/free-icons/books" title="books icons">Books icons created by Freepik -  Flaticon</a>
+            <a
+              href="https://www.flaticon.com/free-icons/books"
+              title="books icons"
+              >Books icons created by Freepik - Flaticon</a
+            >
           </div>
           <div>
-            <a target="_blank" href="https://icons8.com/icon/GkO8Cc9gkaLT/bookshelf">Bookshelf</a><span> icon by </span><a target="_blank" href="https://icons8.com">Icons8</a>
+            <a
+              target="_blank"
+              href="https://icons8.com/icon/GkO8Cc9gkaLT/bookshelf"
+              >Bookshelf</a
+            ><span> icon by </span
+            ><a target="_blank" href="https://icons8.com">Icons8</a>
           </div>
         </div>
       </footer>
     </aside>
     <main class="center">
-      <div class="add-book center">
+      <div class="add-book center" id="add-book-card">
         <svg width="50" height="50">
           <rect x="18.75" y="0" width="12.5" height="50" />
           <rect x="0" y="18.75" width="50" height="12.5" />
         </svg>
       </div>
     </main>
+    <!-- #region form-->
+    <div class="invisible display" id="add-book">
+      <div class="background"></div>
+      <div class="form">
+        <h1>Add book</h1>
+        <div class="fields">
+          <div class="field">
+            <label for="">Titol</label>
+            <input type="text" name="titol" id="titol"/>
+            <small></small>
+          </div>
+          <div class="field">
+            <label for="">Author</label>
+            <input type="text" id="author"/>
+            <small></small>
+          </div>
+          <div class="field-numbers">
+            <div class="field">
+              <label for="">Pages read</label>
+              <input type="number" value="0" min="0" id="pages-read"/>
+              <small></small>
+            </div>
+            <div class="field">
+              <label for="">Pages</label>
+              <input type="number" value="0" min="0" id="pages"/>
+              <small></small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="">Description</label>
+            <textarea name="" id="description" cols="30" rows="8"></textarea>
+            <small></small>
+          </div>
+          <div class="field">
+            <label for="">Book image</label>
+            <input type="url" id="url-image"/>
+            <small></small>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="delete">DELETE</button>
+          <button class="add" id="form-add">ADD</button>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
   </body>
 </html>

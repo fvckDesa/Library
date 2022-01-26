@@ -1,6 +1,6 @@
 let myLibrary = [];
 
-function Book (title, author, description, pagesRead, pages){
+function Book (title, author, description, pagesRead, pages, url){
     this.title = title;
     this.author = author;
     this.description = description;
@@ -17,6 +17,14 @@ function Book (title, author, description, pagesRead, pages){
 
         const cardFront = document.createElement('div');
         cardFront.classList.add('card-front');
+        fetch(url)
+            .then(response => response.blob())
+            .then(myBlob => {
+            cardFront.style.background = `url(${URL.createObjectURL(myBlob)}) no-repeat fixed center`;
+        }).catch(err => {
+            cardFront.style.background = 'var(--cafe-noir)';
+            throw new Error(err);
+        });
 
         const title = document.createElement('div');
         title.classList.add('title');
@@ -83,20 +91,45 @@ function Book (title, author, description, pagesRead, pages){
     }
 }
 
+const addBook = document.querySelector('#add-book');
+const addBookBtn = document.querySelector('#add-book-button');
+const addBookCard = document.querySelector('#add-book-card');
 const main = document.querySelector('main');
-const addBook = document.querySelector('.add-book');
+const formAdd = document.querySelector('#form-add');
+const formTitol = document.querySelector('#titol');
+const formAuthor = document.querySelector('#author');
+const formDescription = document.querySelector('#description');
+const formPagesRead = document.querySelector('#pages-read');
+const formPages = document.querySelector('#pages');
+const formUrl = document.querySelector('#url-image');
 
-function addBookToLibrary(title, author, description, pagesRead, pages) {
-    myLibrary.unshift(new Book(title, author, description, pagesRead, pages));
+function addBookToLibrary(title, author, description, pagesRead, pages, url) {
+    myLibrary.unshift(new Book(title, author, description, pagesRead, pages, url));
     showBooks();
 }
 
 function showBooks () {
-    main.replaceChildren(addBook);
+    main.replaceChildren(addBookCard);
     myLibrary.forEach(book => {
-        main.insertBefore(book.createCard(), addBook);
+        main.insertBefore(book.createCard(), addBookCard);
     });
 }
 
-addBookToLibrary('prova', 'prova', 'descrizione prova', 1500, 3000);
+[addBookBtn, addBookCard].forEach(element => {
+    element.addEventListener('click', () => {
+        addBook.classList.remove('invisible');
+    });
+});
+
+formAdd.addEventListener('click', () => {
+    const titol = formTitol.value;
+    const author = formAuthor.value;
+    const description = formDescription.value;
+    const image = formUrl.value;
+    const pagesRead = formPagesRead.value;
+    const pages = formPages.value;
+
+    addBookToLibrary(titol, author, description, pagesRead, pages, image);
+    addBook.classList.add('invisible');
+})
 
