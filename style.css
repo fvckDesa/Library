@@ -33,7 +33,7 @@ main {
   flex-wrap: wrap;
   width: 70vw;
   min-height: 100%;
-  padding: 1rem;
+  padding: 1.5rem;
   gap: 2rem 1rem;
   background-color: #d5e2f2;
 }
@@ -199,6 +199,7 @@ input[type="number"]::-webkit-inner-spin-button,
 }
 
 .flip-box {
+  position: relative;
   background: transparent;
   width: 200px;
   height: 275px;
@@ -338,7 +339,7 @@ input[type="number"]::-webkit-inner-spin-button,
 }
 
 .background {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -349,7 +350,7 @@ input[type="number"]::-webkit-inner-spin-button,
 }
 
  .form {
-  position: absolute;
+  position: fixed;
   top: 5%;
   left: 35%;
   display: flex;
@@ -389,4 +390,24 @@ input[type="number"]::-webkit-inner-spin-button,
 
 .invisible {
   display: none;
+}
+
+.shadow { 
+  box-shadow: 5px 5px 45px 25px rgba(13,130,255,0.7);
+}
+
+.delete-btn {
+  position: absolute;
+  top: -3%;
+  left: 90%;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: red;
+  transition: all 0.8s;
+}
+
+.flip-box:hover .delete-btn {
+  top: -5%;
+  left: 95%;
 }
