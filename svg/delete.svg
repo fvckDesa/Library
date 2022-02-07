@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="55px" height="55px" viewBox="0 0 55 55" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <path d="M0 0L55 0L55 55L0 55L0 0Z" id="path_1" />
+    <clipPath id="mask_1">
+      <use xlink:href="#path_1" />
+    </clipPath>
+  </defs>
+  <g id="Cancel-icon">
+    <path d="M0 0L55 0L55 55L0 55L0 0Z" id="Background" fill="none" fill-rule="evenodd" stroke="none" />
+    <g clip-path="url(#mask_1)">
+      <path d="M50.4166 27.5002C50.4166 40.1559 40.1557 50.4168 27.5 50.4168C14.8443 50.4168 4.58331 40.1559 4.58331 27.5002C4.58331 14.8444 14.8443 4.5835 27.5 4.5835C40.1557 4.5835 50.4166 14.8444 50.4166 27.5002L50.4166 27.5002Z" id="Shape" fill="#F44336" stroke="none" />
+      <path d="M33.9808 17.7788L37.2212 21.0192L21.0192 37.2213L17.7787 33.9809L33.9808 17.7788L33.9808 17.7788Z" id="Shape" fill="#FFFFFF" stroke="none" />
+      <path d="M37.2212 33.9809L33.9808 37.2213L17.7787 21.0192L21.0192 17.7788L37.2212 33.9809L37.2212 33.9809Z" id="Shape" fill="#FFFFFF" stroke="none" />
+    </g>
+  </g>
+</svg>

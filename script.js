@@ -6,7 +6,7 @@ function Book(title, author, description, pagesRead, pages, url) {
   this.description = description;
   this.pagesRead = pagesRead < pages ? pagesRead : pages;
   this.pages = pages;
-  this.delete = false;
+  this.notSubmit = true; 
 
   this.createCard = () => {
     const flipBox = document.createElement("div");
@@ -19,7 +19,6 @@ function Book(title, author, description, pagesRead, pages, url) {
 
     const cardFront = document.createElement("div");
     cardFront.classList.add("card-front");
-    cardFront.style.backgroundColor = "var(--cafe-noir)";
     if (url) {
       fetch(url)
         .then((response) => response.blob())
@@ -29,7 +28,15 @@ function Book(title, author, description, pagesRead, pages, url) {
           )}) no-repeat center`;
         })
         .catch((err) => {
-          throw new Error(err);
+          if(this.notSubmit){
+            this.notSubmit = false;
+            const errMessage = document.createElement('div');
+            errMessage.classList.add('err-message');
+            errMessage.innerHTML = `<h1>Errore caricamento immagine</h1><button>OK</button>`;
+            errMessage.lastChild.addEventListener('click', () => document.body.removeChild(errMessage));
+            document.body.appendChild(errMessage);
+            throw new Error(err);
+          }
         });
     }
 
@@ -124,7 +131,7 @@ const checkRead = document.querySelector("#read");
 const checkNotRead = document.querySelector("#not-read");
 
 const observer = new MutationObserver(info);
-observer.observe(main, {subtree: true, childList: true});
+observer.observe(main, { subtree: true, childList: true });
 
 function addBookToLibrary(title, author, description, pagesRead, pages, url) {
   myLibrary.unshift(
@@ -200,16 +207,58 @@ function info() {
   input.addEventListener("input", showBooks)
 );
 
+let check = false;
 deleteBook.addEventListener("click", () => {
+  check = !check;
   const books = document.querySelectorAll("#book");
-  books.forEach((book, i) => {
-    const div = document.createElement("div");
-    div.innerHTML = `<div class="delete-btn"></div>`;
-    div.addEventListener("click", () => {
-        book.remove();
-        myLibrary.splice(i, 1, null);
-        myLibrary = myLibrary.filter(el => el !== null);
+  if (check) {
+    books.forEach((book) => {
+      const div = document.createElement("div");
+      div.id = "x";
+      div.innerHTML = `<img class="delete-btn" src="./svg/delete.svg" />`;
+      div.addEventListener("click", () => {
+        div.remove();
+        book.style.cssText = `animation: delete 1s ease`;
+        setTimeout(() => {
+          book.remove();
+          myLibrary.splice(myLibrary.indexOf(book), 1);
+        }, 950);
+      });
+      book.appendChild(div);
     });
-    book.appendChild(div);
-  });
+  } else {
+    books.forEach((book) => {
+      const div = book.lastChild;
+      if (div.id === "x") {
+        book.removeChild(div);
+      }
+    });
+  }
+});
+
+const infoBtn = document.querySelector("#info-btn");
+const reference = document.querySelector(".reference");
+
+function addClass() {
+  setTimeout(() => {
+    reference.classList.add("visibility");
+  }, 300);
+}
+
+function removeClass() {
+  reference.classList.remove("visibility");
+}
+
+infoBtn.addEventListener("mouseover", removeClass);
+
+infoBtn.addEventListener("mouseleave", addClass);
+
+const moon = document.querySelector('#moon');
+
+moon.addEventListener('click', () => {
+  main.classList.toggle('change-main');
+  document.querySelector('aside').classList.toggle('change-aside');
+  const books = document.querySelectorAll(".card-front");
+  books.forEach(book => book.classList.toggle('change-aside'));
+  addBookCard.classList.toggle('change-aside');
 });
