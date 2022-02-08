@@ -23,7 +23,7 @@ function Book(title, author, description, pagesRead, pages, url) {
       fetch(url)
         .then((response) => response.blob())
         .then((myBlob) => {
-          cardFront.style.background = `var(--cafe-noir) url(${URL.createObjectURL(
+          cardFront.style.background = `var(--aside-card) url(${URL.createObjectURL(
             myBlob
           )}) no-repeat center`;
         })
@@ -256,9 +256,5 @@ infoBtn.addEventListener("mouseleave", addClass);
 const moon = document.querySelector('#moon');
 
 moon.addEventListener('click', () => {
-  main.classList.toggle('change-main');
-  document.querySelector('aside').classList.toggle('change-aside');
-  const books = document.querySelectorAll(".card-front");
-  books.forEach(book => book.classList.toggle('change-aside'));
-  addBookCard.classList.toggle('change-aside');
+  document.body.classList.toggle('dark-theme');
 });
