@@ -19,25 +19,9 @@ function Book(title, author, description, pagesRead, pages, url) {
 
     const cardFront = document.createElement("div");
     cardFront.classList.add("card-front");
-    if (url) {
-      fetch(url)
-        .then((response) => response.blob())
-        .then((myBlob) => {
-          cardFront.style.background = `var(--aside-card) url(${URL.createObjectURL(
-            myBlob
-          )}) no-repeat center`;
-        })
-        .catch((err) => {
-          if(this.notSubmit){
-            this.notSubmit = false;
-            const errMessage = document.createElement('div');
-            errMessage.classList.add('err-message');
-            errMessage.innerHTML = `<h1>Errore caricamento immagine</h1><button>OK</button>`;
-            errMessage.lastChild.addEventListener('click', () => document.body.removeChild(errMessage));
-            document.body.appendChild(errMessage);
-            throw new Error(err);
-          }
-        });
+
+    if(url) {
+      cardFront.style.backgroundImage = `url(${url})`;
     }
 
     const title = document.createElement("div");
@@ -115,12 +99,12 @@ const main = document.querySelector("main");
 //form
 const formAdd = document.querySelector("#form-add");
 const formDelete = document.querySelector("#form-delete");
-const formTitol = document.querySelector("#titol");
+const formTitle = document.querySelector("#title");
 const formAuthor = document.querySelector("#author");
 const formDescription = document.querySelector("#description");
 const formPagesRead = document.querySelector("#pages-read");
 const formPages = document.querySelector("#pages");
-const formUrl = document.querySelector("#url-image");
+const formImage = document.querySelector("#book-image");
 //info
 const infoBook = document.querySelector("#info-book");
 const infoBookRead = document.querySelector("#info-book-read");
@@ -159,14 +143,15 @@ function showBooks() {
   });
 });
 
-formAdd.addEventListener("click", () => {
-  const titol = formTitol.value;
+addBook.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const title = formTitle.value;
   const author = formAuthor.value;
   const description = formDescription.value;
-  const image = formUrl.value;
+  const image = formImage.files.length ? URL.createObjectURL(formImage.files[0]) : null;
   const pagesRead = +formPagesRead.value;
   const pages = +formPages.value;
-  addBookToLibrary(titol, author, description, pagesRead, pages, image);
+  addBookToLibrary(title, author, description, pagesRead, pages, image);
   clearForm();
 });
 
@@ -174,10 +159,10 @@ formDelete.addEventListener("click", clearForm);
 
 function clearForm() {
   const form = [
-    formTitol,
+    formTitle,
     formAuthor,
     formDescription,
-    formUrl,
+    formImage,
     formPagesRead,
     formPages,
   ];
@@ -258,3 +243,4 @@ const moon = document.querySelector('#moon');
 moon.addEventListener('click', () => {
   document.body.classList.toggle('dark-theme');
 });
+

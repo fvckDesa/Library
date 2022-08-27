@@ -7,6 +7,7 @@
   --day-sky: #d5e2f2;
   --night-sky: #252850;
   --night-brown: #24160F;
+  --good-input: #00ff9d;
 
   --aside-card: var(--dark-brown);
   --main: var(--day-sky);
@@ -23,6 +24,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  transition: background-color 1s ease;
 }
 
 body {
@@ -266,8 +268,11 @@ input[type="number"]::-webkit-inner-spin-button,
 
 .card-front {
   color: white;
-  background-color: var(--aside-card);
   text-align: center;
+  background-color: var(--aside-card);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .err-message {
@@ -405,7 +410,7 @@ input[type="number"]::-webkit-inner-spin-button,
   opacity: 0.5;
 }
 
- .form {
+.form {
   position: fixed;
   top: 5%;
   left: 35%;
@@ -425,6 +430,7 @@ input[type="number"]::-webkit-inner-spin-button,
   display: flex;
   flex-direction: column;
   margin-bottom: 0.5rem;
+  overflow: hidden;
 }
 
 .field-numbers {
@@ -467,4 +473,21 @@ input[type="number"]::-webkit-inner-spin-button,
 .flip-box:hover .delete-btn {
   top: -5%;
   left: 95%;
+}
+
+.error {
+  height: 0;
+  color: rgb(255, 0, 0);
+  transition: 0.5s;
+}
+input:invalid:focus:not(:placeholder-shown) + .error{
+  height: 30px;
+}
+
+input:invalid:not(:focus):not(:placeholder-shown) {
+  background-color: hsl(0, 100%, 65%) !important;
+}
+
+:focus {
+  outline: 0;
 }
