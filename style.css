@@ -50,6 +50,7 @@ main {
   width: 70vw;
   min-height: 100%;
   padding: 1.5rem;
+  padding-top: 6rem;
   gap: 2rem 1rem;
   background-color: var(--main);
 }
