@@ -1,20 +1,33 @@
 import { onAuthStateChanged } from "firebase/auth";
+import { onSnapshot } from "firebase/firestore";
 import { signInUser, signOutUser, auth } from "./script/auth";
+import {
+  booksQuery,
+  createBook,
+  updateBook,
+  deleteBook,
+  docsArrToBooksArr,
+} from "./script/database";
 
-let myLibrary = [];
+function $(query, parent = document) {
+  return parent.querySelector(query);
+}
 
-function Book(title, author, description, pagesRead, pages, url) {
+$.all = (query, parent = document) => [...parent.querySelectorAll(query)];
+
+function Book({ title, author, description, pagesRead, pages, image }) {
   this.title = title;
   this.author = author;
   this.description = description;
   this.pagesRead = pagesRead < pages ? pagesRead : pages;
   this.pages = pages;
-  this.notSubmit = true;
 
-  this.createCard = () => {
+  this.createCard = (id) => {
     const flipBox = document.createElement("div");
-    flipBox.classList.add("flip-box");
-    flipBox.id = "book";
+    flipBox.classList.add("flip-box", "book");
+    flipBox.id = id;
+    flipBox.dataset.pages = pages;
+    flipBox.dataset.pagesRead = pagesRead;
 
     const card = document.createElement("div");
     card.classList.add("card");
@@ -23,8 +36,8 @@ function Book(title, author, description, pagesRead, pages, url) {
     const cardFront = document.createElement("div");
     cardFront.classList.add("card-front");
 
-    if (url) {
-      cardFront.style.backgroundImage = `url(${url})`;
+    if (image) {
+      cardFront.style.backgroundImage = `url(${image})`;
     }
 
     const title = document.createElement("div");
@@ -72,12 +85,13 @@ function Book(title, author, description, pagesRead, pages, url) {
     input.setAttribute("max", this.pages);
     input.setAttribute("placeholder", 0);
     input.id = "number";
-    input.addEventListener("input", (e) => {
+    input.addEventListener("input", async (e) => {
       if (e.target.value > this.pages) {
         e.target.value = this.pages;
       }
       this.pagesRead = +e.target.value;
-      info();
+      await updateBook(id, { pagesRead: this.pagesRead });
+      flipBox.dataset.pagesRead = this.pagesRead;
     });
 
     const pageTot = document.createElement("div");
@@ -97,7 +111,7 @@ function Book(title, author, description, pagesRead, pages, url) {
 const addBook = document.querySelector("#add-book");
 const addBookBtn = document.querySelector("#add-book-button");
 const addBookCard = document.querySelector("#add-book-card");
-const deleteBook = document.querySelector("#delete-button");
+const deleteBookBtn = document.querySelector("#delete-button");
 const main = document.querySelector("main");
 //form
 const formAdd = document.querySelector("#form-add");
@@ -123,46 +137,22 @@ const signOutBtn = document.querySelector("#sign-out");
 const userPic = document.querySelector(".user-pic");
 const userName = document.querySelector(".user-name");
 
-const observer = new MutationObserver(info);
-observer.observe(main, { subtree: true, childList: true });
-
-function addBookToLibrary(title, author, description, pagesRead, pages, url) {
-  myLibrary.unshift(
-    new Book(title, author, description, pagesRead, pages, url)
-  );
-  showBooks();
-}
-
-function showBooks() {
-  main.replaceChildren(addBookCard);
-  myLibrary.forEach((book) => {
-    const card = book.createCard();
-    if (checkRead.checked && book.pages === book.pagesRead) {
-      main.insertBefore(card, addBookCard);
-    }
-    if (checkNotRead.checked && book.pages !== book.pagesRead) {
-      main.insertBefore(card, addBookCard);
-    }
-  });
-}
-
 [addBookBtn, addBookCard].forEach((element) => {
   element.addEventListener("click", () => {
     addBook.classList.remove("invisible");
   });
 });
 
-addBook.addEventListener("submit", (e) => {
+addBook.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const title = formTitle.value;
-  const author = formAuthor.value;
-  const description = formDescription.value;
-  const image = formImage.files.length
-    ? URL.createObjectURL(formImage.files[0])
-    : null;
-  const pagesRead = +formPagesRead.value;
-  const pages = +formPages.value;
-  addBookToLibrary(title, author, description, pagesRead, pages, image);
+  await createBook({
+    title: formTitle.value,
+    author: formAuthor.value,
+    description: formDescription.value,
+    image: formImage.files[0],
+    pagesRead: +formPagesRead.value,
+    pages: +formPages.value,
+  });
   clearForm();
 });
 
@@ -181,32 +171,14 @@ function clearForm() {
   addBook.classList.add("invisible");
 }
 
-function info() {
-  let numBook = myLibrary.length;
-  let numBookRead = 0;
-  let pages = 0;
-  let pagesRead = 0;
-  myLibrary.forEach((book) => {
-    if (book.pages === book.pagesRead) {
-      numBookRead++;
-    }
-    pages += book.pages;
-    pagesRead += book.pagesRead;
-  });
-  infoBook.innerText = numBook;
-  infoBookRead.innerText = numBookRead;
-  infoPages.innerText = pages;
-  infoPagesRead.innerText = pagesRead;
-}
-
 [checkRead, checkNotRead].forEach((input) =>
-  input.addEventListener("input", showBooks)
+  input.addEventListener("input", filterBooks)
 );
 
 let check = false;
-deleteBook.addEventListener("click", () => {
+deleteBookBtn.addEventListener("click", () => {
   check = !check;
-  const books = document.querySelectorAll("#book");
+  const books = document.querySelectorAll(".book");
   if (check) {
     books.forEach((book) => {
       const div = document.createElement("div");
@@ -215,9 +187,8 @@ deleteBook.addEventListener("click", () => {
       div.addEventListener("click", () => {
         div.remove();
         book.style.cssText = `animation: delete 1s ease`;
-        setTimeout(() => {
-          book.remove();
-          myLibrary.splice(myLibrary.indexOf(book), 1);
+        setTimeout(async () => {
+          await deleteBook(book.id);
         }, 950);
       });
       book.appendChild(div);
@@ -254,7 +225,7 @@ const moon = document.querySelector("#moon");
 moon.addEventListener("click", () => {
   document.body.classList.toggle("dark-theme");
 });
-
+// Auth
 onAuthStateChanged(auth, (user) => {
   signInBtn.classList.toggle("hidden", user !== null);
   userContainer.classList.toggle("hidden", user === null);
@@ -267,3 +238,71 @@ onAuthStateChanged(auth, (user) => {
 
 signInBtn.addEventListener("click", signInUser);
 signOutBtn.addEventListener("click", signOutUser);
+// Database
+onSnapshot(booksQuery, (snapshot) => {
+  for (const change of snapshot.docChanges()) {
+    switch (change.type) {
+      case "added":
+      case "modified":
+        displayBook(change.doc.id, change.doc.data());
+        break;
+      case "removed":
+        removeBook(change.doc.id);
+        break;
+    }
+  }
+
+  changeLibraryInfo(
+    // number of books
+    snapshot.docs.length,
+    // number of books read
+    docsArrToBooksArr(snapshot.docs).filter(
+      ({ pagesRead, pages }) => pagesRead === pages
+    ).length,
+    // number of pages
+    docsArrToBooksArr(snapshot.docs).reduce((acc, curr) => acc + curr.pages, 0),
+    // number of pages read
+    docsArrToBooksArr(snapshot.docs).reduce(
+      (acc, curr) => acc + curr.pagesRead,
+      0
+    )
+  );
+});
+
+function displayBook(id, book) {
+  const card = document.getElementById(id);
+  if (card) {
+    const { title, author, description, pagesRead, pages, image } = book;
+    $(".card-front", card).style.backgroundImage = `url(${image})`;
+    $(".title > p", card).innerText = title;
+    $(".author > h3", card).innerText = author;
+    $(".description > p", card).innerText = description;
+    $("#number", card).value = pagesRead;
+    $(".page-tot", card).innerText = pages;
+  } else {
+    const newCard = new Book(book).createCard(id);
+    main.insertBefore(newCard, addBookCard);
+  }
+  filterBooks();
+}
+
+function removeBook(id) {
+  $(`[id="${id}"]`).remove();
+}
+
+function changeLibraryInfo(numBook, numBookRead, pages, pagesRead) {
+  infoBook.innerText = numBook;
+  infoBookRead.innerText = numBookRead;
+  infoPages.innerText = pages;
+  infoPagesRead.innerText = pagesRead;
+}
+
+function filterBooks() {
+  for (const book of $.all(".book")) {
+    const { pages, pagesRead } = book.dataset;
+    book.hidden = !(
+      (checkRead.checked && pages === pagesRead) ||
+      (checkNotRead.checked && pages !== pagesRead)
+    );
+  }
+}
