@@ -1,3 +1,6 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { signInUser, signOutUser, auth } from "./script/auth";
+
 let myLibrary = [];
 
 function Book(title, author, description, pagesRead, pages, url) {
@@ -6,7 +9,7 @@ function Book(title, author, description, pagesRead, pages, url) {
   this.description = description;
   this.pagesRead = pagesRead < pages ? pagesRead : pages;
   this.pages = pages;
-  this.notSubmit = true; 
+  this.notSubmit = true;
 
   this.createCard = () => {
     const flipBox = document.createElement("div");
@@ -20,7 +23,7 @@ function Book(title, author, description, pagesRead, pages, url) {
     const cardFront = document.createElement("div");
     cardFront.classList.add("card-front");
 
-    if(url) {
+    if (url) {
       cardFront.style.backgroundImage = `url(${url})`;
     }
 
@@ -113,6 +116,12 @@ const infoPagesRead = document.querySelector("#info-pages-read");
 //check box
 const checkRead = document.querySelector("#read");
 const checkNotRead = document.querySelector("#not-read");
+//auth
+const signInBtn = document.querySelector("#sign-in");
+const userContainer = document.querySelector(".user-container");
+const signOutBtn = document.querySelector("#sign-out");
+const userPic = document.querySelector(".user-pic");
+const userName = document.querySelector(".user-name");
 
 const observer = new MutationObserver(info);
 observer.observe(main, { subtree: true, childList: true });
@@ -148,7 +157,9 @@ addBook.addEventListener("submit", (e) => {
   const title = formTitle.value;
   const author = formAuthor.value;
   const description = formDescription.value;
-  const image = formImage.files.length ? URL.createObjectURL(formImage.files[0]) : null;
+  const image = formImage.files.length
+    ? URL.createObjectURL(formImage.files[0])
+    : null;
   const pagesRead = +formPagesRead.value;
   const pages = +formPages.value;
   addBookToLibrary(title, author, description, pagesRead, pages, image);
@@ -238,9 +249,21 @@ infoBtn.addEventListener("mouseover", removeClass);
 
 infoBtn.addEventListener("mouseleave", addClass);
 
-const moon = document.querySelector('#moon');
+const moon = document.querySelector("#moon");
 
-moon.addEventListener('click', () => {
-  document.body.classList.toggle('dark-theme');
+moon.addEventListener("click", () => {
+  document.body.classList.toggle("dark-theme");
 });
 
+onAuthStateChanged(auth, (user) => {
+  signInBtn.classList.toggle("hidden", user !== null);
+  userContainer.classList.toggle("hidden", user === null);
+
+  const { photoURL = "", displayName = "" } = user ?? {};
+
+  userPic.src = photoURL;
+  userName.innerText = displayName;
+});
+
+signInBtn.addEventListener("click", signInUser);
+signOutBtn.addEventListener("click", signOutUser);

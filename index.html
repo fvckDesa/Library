@@ -10,7 +10,7 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js" defer></script>
     <title>Library</title>
   </head>
   <body>
@@ -38,11 +38,11 @@
       </header>
       <nav>
         <div class="checkbox center">
-          <input type="checkbox" name="" id="read" checked/>
+          <input type="checkbox" name="" id="read" checked />
           <label for="read">READ</label>
         </div>
         <div class="checkbox center">
-          <input type="checkbox" name="" id="not-read" checked/>
+          <input type="checkbox" name="" id="not-read" checked />
           <label for="not-read">NOT READ</label>
         </div>
         <button class="delete" id="delete-button">DELETE</button>
@@ -124,34 +124,68 @@
         <div class="fields">
           <div class="field">
             <label for="">Title</label>
-            <input type="text" autocomplete="off" name="title" id="title" placeholder="book's title" required/>
+            <input
+              type="text"
+              autocomplete="off"
+              name="title"
+              id="title"
+              placeholder="book's title"
+              required
+            />
             <div class="error">Enter title</div>
           </div>
           <div class="field">
             <label for="">Author</label>
-            <input type="text" autocomplete="off" id="author" placeholder="book's author" required/>
+            <input
+              type="text"
+              autocomplete="off"
+              id="author"
+              placeholder="book's author"
+              required
+            />
             <div class="error">Enter author</div>
           </div>
           <div class="field-numbers">
             <div class="field">
               <label for="">Pages read</label>
-              <input type="number" value="" min="0" id="pages-read" placeholder="0" required/>
+              <input
+                type="number"
+                value=""
+                min="0"
+                id="pages-read"
+                placeholder="0"
+                required
+              />
               <div class="error">Enter pages read</div>
             </div>
             <div class="field">
               <label for="">Pages</label>
-              <input type="number" value="" min="0" id="pages" placeholder="0" required/>
+              <input
+                type="number"
+                value=""
+                min="0"
+                id="pages"
+                placeholder="0"
+                required
+              />
               <div class="error">Enter total pages of book</div>
             </div>
           </div>
           <div class="field">
             <label for="">Description</label>
-            <textarea name="" id="description" cols="30" rows="8" placeholder="short description"  required></textarea>
+            <textarea
+              name=""
+              id="description"
+              cols="30"
+              rows="8"
+              placeholder="short description"
+              required
+            ></textarea>
             <div class="error">Enter a little description of book</div>
           </div>
           <div class="field">
             <label for="">Book image</label>
-            <input type="file" id="book-image" placeholder="book cover image"/>
+            <input type="file" id="book-image" placeholder="book cover image" />
             <div class="error">URL entered is invalid</div>
           </div>
         </div>
@@ -162,5 +196,24 @@
       </div>
     </form>
     <!-- #endregion -->
+    <div class="auth-container">
+      <button class="sign-in-google" id="sign-in">
+        <img class="google-logo" src="./image/google.svg" alt="google logo" />
+        Sign In with Google
+      </button>
+      <div class="user-container hidden">
+        <img
+          class="user-pic"
+          src=""
+          alt="profile picture"
+          referrerpolicy="no-referrer"
+        />
+        <div class="user-name"></div>
+        <button class="sign-out" id="sign-out">
+          Sign Out
+          <div class="underline"></div>
+        </button>
+      </div>
+    </div>
   </body>
 </html>
