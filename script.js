@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
-import { signInUser, signOutUser, auth } from "./script/auth";
+import { signInUser, signOutUser, auth, isAuth } from "./script/auth";
 import {
   booksQuery,
   createBook,
@@ -139,12 +139,18 @@ const userName = document.querySelector(".user-name");
 
 [addBookBtn, addBookCard].forEach((element) => {
   element.addEventListener("click", () => {
+    if (!isAuth()) {
+      return alert("Log in for add books in your library");
+    }
     addBook.classList.remove("invisible");
   });
 });
 
 addBook.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!isAuth()) {
+    return alert("Log in for add books in your library");
+  }
   await createBook({
     title: formTitle.value,
     author: formAuthor.value,
@@ -234,6 +240,11 @@ onAuthStateChanged(auth, (user) => {
 
   userPic.src = photoURL;
   userName.innerText = displayName;
+
+  if (!user) {
+    $.all(".book").forEach((book) => book.remove());
+    changeLibraryInfo(0, 0, 0, 0);
+  }
 });
 
 signInBtn.addEventListener("click", signInUser);

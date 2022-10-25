@@ -10,3 +10,7 @@ export async function signInUser() {
 export async function signOutUser() {
   signOut(auth);
 }
+
+export function isAuth() {
+  return !!auth.currentUser;
+}
