@@ -8,6 +8,7 @@
   --night-sky: #252850;
   --night-brown: #24160f;
   --good-input: #00ff9d;
+  --blue: #4285f4;
 
   --aside-card: var(--dark-brown);
   --main: var(--day-sky);
@@ -100,8 +101,8 @@ footer {
 }
 
 .add-book,
-svg {
-  fill: var(--blond);
+.add-book-cross {
+  cursor: pointer;
   transition: transform 0.5s ease;
 }
 
@@ -116,7 +117,7 @@ svg {
   transform: scale(1.05);
 }
 
-.add-book:hover svg {
+.add-book:hover .add-book-cross {
   transform: rotate(180deg) scale(1.05);
 }
 
@@ -124,9 +125,8 @@ svg {
   width: 64px;
 }
 
-.btn-theme {
-  background-color: transparent;
-  border: none;
+.moon-btn {
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -540,7 +540,7 @@ input:invalid:not(:focus):not(:placeholder-shown) {
   gap: 10px;
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: #4285f4;
+  background-color: var(--blue);
   color: white;
   font-size: 14px;
 }
