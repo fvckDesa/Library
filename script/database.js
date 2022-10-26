@@ -13,6 +13,11 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const IMAGE_LOADER = "https://www.google.com/images/spin-32.gif?a";
 
+export const booksQuery = query(
+  collection(db, "books"),
+  orderBy("timestamp", "asc")
+);
+
 function getBookRef(id) {
   return doc(db, "books", id);
 }
@@ -61,8 +66,3 @@ export async function deleteBook(id) {
 export function docsArrToBooksArr(docs) {
   return docs.map((doc) => doc.data());
 }
-
-export const booksQuery = query(
-  collection(db, "books"),
-  orderBy("timestamp", "asc")
-);

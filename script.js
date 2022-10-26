@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { onSnapshot } from "firebase/firestore";
+import { onSnapshot, getDocs } from "firebase/firestore";
 import { signInUser, signOutUser, auth, isAuth } from "./script/auth";
 import {
   booksQuery,
@@ -8,6 +8,7 @@ import {
   deleteBook,
   docsArrToBooksArr,
 } from "./script/database";
+import DeleteImg from "./assets/delete.svg";
 
 function $(query, parent = document) {
   return parent.querySelector(query);
@@ -189,7 +190,7 @@ deleteBookBtn.addEventListener("click", () => {
     books.forEach((book) => {
       const div = document.createElement("div");
       div.id = "x";
-      div.innerHTML = `<img class="delete-btn" src="./svg/delete.svg" />`;
+      div.innerHTML = `<img class="delete-btn" src="${DeleteImg}" />`;
       div.addEventListener("click", () => {
         div.remove();
         book.style.cssText = `animation: delete 1s ease`;
@@ -232,7 +233,7 @@ moon.addEventListener("click", () => {
   document.body.classList.toggle("dark-theme");
 });
 // Auth
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   signInBtn.classList.toggle("hidden", user !== null);
   userContainer.classList.toggle("hidden", user === null);
 
@@ -244,6 +245,27 @@ onAuthStateChanged(auth, (user) => {
   if (!user) {
     $.all(".book").forEach((book) => book.remove());
     changeLibraryInfo(0, 0, 0, 0);
+  } else {
+    const snapshot = await getDocs(booksQuery);
+    snapshot.forEach((doc) => displayBook(doc.id, doc.data()));
+    changeLibraryInfo(
+      // number of books
+      snapshot.docs.length,
+      // number of books read
+      docsArrToBooksArr(snapshot.docs).filter(
+        ({ pagesRead, pages }) => pagesRead === pages
+      ).length,
+      // number of pages
+      docsArrToBooksArr(snapshot.docs).reduce(
+        (acc, curr) => acc + curr.pages,
+        0
+      ),
+      // number of pages read
+      docsArrToBooksArr(snapshot.docs).reduce(
+        (acc, curr) => acc + curr.pagesRead,
+        0
+      )
+    );
   }
 });
 
